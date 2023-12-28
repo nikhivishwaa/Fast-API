@@ -48,8 +48,8 @@
                 <input type="text" class="form-control" id="desc" name="desc">
             </div>
             <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <input type="checkbox" class="form-check-input" id="important" name="important">
+                <label class="form-check-label" for="important">Mark as Important</label>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -57,7 +57,7 @@
             <h2 class="mt-5">Your Saved Notes</h2>
             <div class="notes">
                 {%for i in notes %}
-                <p>{{i.note}}</p>
+                <p>{{i.title}}</p>
                 {% endfor %}
             </div>
         </div>
