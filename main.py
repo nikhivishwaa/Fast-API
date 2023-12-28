@@ -1,3 +1,4 @@
+from fastapi import APIRouter
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,6 +9,7 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+note = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
 
@@ -18,7 +20,7 @@ db = MongoClient("mongodb://localhost:27017")
 #     return {"Hello": "World"}
 
 
-@app.get("/", response_class=HTMLResponse)
+@note.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     x = db.notes.notes.find({}) 
     for i in x:
@@ -26,6 +28,8 @@ async def read_item(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/items/{item_id}")
+@note.get("/items/{item_id}")
 def read_item(item_id: int, q:str|None = None):
     return {"item_id": item_id, "q": q}
+
+app.include_router(note)
