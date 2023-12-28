@@ -18,24 +18,25 @@ async def read_item(request: Request):
     x = conn.notes.notes.find({}) 
     for i in x:
         notes.append(i)
-        print(i)
-    print(notes)
     return templates.TemplateResponse("index.html", {"request": request, "notes":notes})
 
 
 @note.post("/")
 async def add_note(request: Request):
     formdata = await request.form()
-    print(formdata)
-    # new_note = dict(formdata)
-    # new_note['important'] = True if new_note['important'] == 'on' else False
-    # print(new_note)
-    # x = conn.notes.notes.insert_one(new_note) 
-    x = conn.notes.notes.insert_one(dict(formdata)) 
-    return {"success": True, "id":x}
+    new_note = dict(formdata)
+    new_note['important'] = True if 'important' in new_note.keys() else False
+    new_note["_id"] = "1"
+    x = conn.notes.notes.insert_one(new_note) 
+    print(x)
+    return {"success": True}
 
 
-# @note.get("/items/{item_id}")
-# def read_item(item_id: int, q:str|None = None):
-#     return {"item_id": item_id, "q": q}
+@note.put("/notes/{id}")
+def read_item(id: int, q:str|None = None):
+    if q is not None:
+        conn.notes.notes.update_one({"_id" : str(id)}, {"update": "successful"})
+        x = conn.notes.notes.find_one({"_id" : str(id)})
+    print(x)
+    return x
 
